@@ -5063,8 +5063,8 @@ class HomePage extends StatelessWidget {
                 children: [
                 //Awadh logo
                 IconButton(
-                  icon: Image.asset(
-                      'assets/images/awadh_logo_only.jpeg',
+                  icon: Image.network(
+                      'https://pbs.twimg.com/profile_images/1457950809623187463/N8F-A4xt_400x400.jpg',
                       //height: 500.0,
                       //width: 100.0
                     //color: Colors.white,
