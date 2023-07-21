@@ -5022,17 +5022,14 @@ class HomePage extends StatelessWidget {
                             IconButton(
                               icon: Image.network(
                                 'https://pbs.twimg.com/profile_images/1457950809623187463/N8F-A4xt_400x400.jpg',
-
-                                //'https://asset-timestsw-com.s3.ap-south-1.amazonaws.com/wp-content/uploads/2020/05/25183010/IIT-Ropar-2.png',
                                 //height: 500.0,
-                                //width: 150.0
+                                //width: 100.0
                                 //color: Colors.white,
                               ),
                               //label:Text('About'),
-                              iconSize: 50.0,
+                              iconSize: 55.0,
                               onPressed: () {
-                                const url = 'https://ihub-awadh.in/';
-                                launch(url);
+                                Navigator.pushNamed(context, '/');
                               },
                             ),
 
