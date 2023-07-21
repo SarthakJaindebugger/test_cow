@@ -5001,7 +5001,7 @@ class HomePage extends StatelessWidget {
                     children: [
                       Expanded(
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
+                          //mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             //Awadh logo ok
                             IconButton(
