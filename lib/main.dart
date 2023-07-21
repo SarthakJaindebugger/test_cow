@@ -2317,9 +2317,7 @@ class MyApp extends StatelessWidget {
 
  */
 
-
 //2nd better
-
 
 //2nd one better
 /*
@@ -2419,7 +2417,6 @@ class SecondPage extends StatelessWidget {
   }
 }
 */
-
 
 //3rd
 /*
@@ -3013,7 +3010,6 @@ class SecondPage extends StatelessWidget {
 }
 
  */
-
 
 /*
 
@@ -3840,7 +3836,6 @@ class SecondPage extends StatelessWidget {
 }
  */
 
-
 //Epoch time
 /*
 import 'package:flutter/material.dart';
@@ -4095,17 +4090,6 @@ class _FieldPageState extends State<FieldPage> {
 }
 
 */
-
-
-
-
-
-
-
-
-
-
-
 
 /*
 
@@ -4690,17 +4674,6 @@ class printTabular extends StatelessWidget {
 
 */
 
-
-
-
-
-
-
-
-
-
-
-
 /*
 import 'dart:convert';
 import 'package:flutter/material.dart';
@@ -4758,17 +4731,6 @@ void printRow(Map<dynamic, dynamic> data) {
   print('---');
 }
 */
-
-
-
-
-
-
-
-
-
-
-
 
 /*
 //final url = Uri.parse('https://wcelyqvyi7.execute-api.us-east-1.amazonaws.com/deployment/cow?deviceId=120&starttime=1688132921&endtime=1688133222'); // Replace with your API endpoint
@@ -4846,13 +4808,6 @@ class FetchDataWidget extends StatelessWidget {
   }
 }
 */
-
-
-
-
-
-
-
 
 /*
 
@@ -4956,9 +4911,6 @@ class HomePage extends StatelessWidget {
 
 */
 
-
-
-
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
@@ -4975,11 +4927,9 @@ void main() {
   runApp(NavigationBarApp());
 }
 
-void onClick() async
-{
+void onClick() async {
   print("Button cliked!");
 }
-
 
 class NavigationBarApp extends StatelessWidget {
   @override
@@ -4992,15 +4942,13 @@ class NavigationBarApp extends StatelessWidget {
       title: 'WebApp',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSwatch().copyWith(
-
-          primary:  Colors.white,
-          secondary:  Colors.yellow.shade700,
+          primary: Colors.white,
+          secondary: Colors.yellow.shade700,
 
           // or from RGB
 
           //primary: const Color(0xFF343A40),
           //secondary: const Color(0xFFFFC107),
-
         ),
       ),
 
@@ -5008,7 +4956,6 @@ class NavigationBarApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.white38,
       ),*/
-
 
       home: HomePage(),
       routes: {
@@ -5033,85 +4980,79 @@ class HomePage extends StatelessWidget {
       body: SingleChildScrollView(
         padding: EdgeInsets.all(1.0),
         child: Center(
-        child: Column(
+          child: Column(
+            children: [
+              SafeArea(
+                //Nav Bar
+                child: Container(
+                  padding: EdgeInsets.zero,
+                  //height : height * 0.2,
+                  //width: width * 0.4,
+                  //height: hight * 0.8,
+                  //width : width * 0.2,
+                  //height: height * 0.1,
+                  //width: width * 0.9,
+                  //width: MediaQuery.of(context).size.width,
+                  //fit: BoxFit.cover,
+                  color: Colors.white,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Expanded(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            //Awadh logo
+                            IconButton(
+                              icon: Image.network(
+                                'https://pbs.twimg.com/profile_images/1457950809623187463/N8F-A4xt_400x400.jpg',
+                                //height: 500.0,
+                                //width: 100.0
+                                //color: Colors.white,
+                              ),
+                              //label:Text('About'),
+                              iconSize: 55.0,
+                              onPressed: () {
+                                Navigator.pushNamed(context, '/');
+                              },
+                            ),
 
-        children: [
+                            //IITRopar logo
+                            IconButton(
+                              icon: Image.network(
+                                'ahttps://upload.wikimedia.org/wikipedia/en/thumb/f/f9/Indian_Institute_of_Technology_Ropar_logo.png/220px-Indian_Institute_of_Technology_Ropar_logo.png',
+                                //height: 500.0,
+                                //width: 150.0
+                                //color: Colors.white,
+                              ),
+                              //label:Text('About'),
+                              iconSize: 50.0,
+                              onPressed: () {
+                                const url = 'https://ihub-awadh.in/';
+                                launch(url);
+                              },
+                            ),
 
+                            //Department of Sciecne of Technology logo
+                            IconButton(
+                              icon: Image.network(
+                                'https://dst.gov.in/sites/all/modules/customs/cmf_content/assets/images/dst-logo1.jpg',
+                                //height: 500.0,
+                                //width: 150.0
+                                //color: Colors.white,
+                              ),
+                              //label:Text('About'),
+                              iconSize: 100.0,
+                              onPressed: () {
+                                const url = 'https://dst.gov.in/';
+                                launch(url);
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
 
-
-          SafeArea(
-          //Nav Bar
-          child: Container(
-            padding: EdgeInsets.zero,
-            //height : height * 0.2,
-            //width: width * 0.4,
-            //height: hight * 0.8,
-            //width : width * 0.2,
-            //height: height * 0.1,
-            //width: width * 0.9,
-            //width: MediaQuery.of(context).size.width,
-            //fit: BoxFit.cover,
-            color: Colors.white,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-
-                Expanded(
-
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                //Awadh logo
-                IconButton(
-                  icon: Image.network(
-                      'https://pbs.twimg.com/profile_images/1457950809623187463/N8F-A4xt_400x400.jpg',
-                      //height: 500.0,
-                      //width: 100.0
-                    //color: Colors.white,
-                  ),
-                  //label:Text('About'),
-                  iconSize: 55.0,
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/');
-                  },
-                ),
-
-                //IITRopar logo
-                IconButton(
-                  icon: Image.asset(
-                    'assets/images/iitropar_logo.png',
-                    //height: 500.0,
-                    //width: 150.0
-                    //color: Colors.white,
-                  ),
-                  //label:Text('About'),
-                  iconSize: 50.0,
-                  onPressed: () {
-                    const url = 'https://ihub-awadh.in/';
-                    launch(url);
-                  },
-                ),
-
-                //Department of Sciecne of Technology logo
-                IconButton(
-                  icon: Image.asset(
-                      'assets/images/sct_logo.jpeg',
-                      //height: 500.0,
-                      //width: 150.0
-                    //color: Colors.white,
-                  ),
-                  //label:Text('About'),
-                  iconSize: 100.0,
-                  onPressed: () {
-                    const url ='https://dst.gov.in/';
-                    launch(url);
-                  },
-                ),
-                  ],
-                ),
-                ),
-
-                /*
+                      /*
                 IconButton(
                   icon: Image.network(
                     'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Cow_clipart_01.svg/1200px-Cow_clipart_01.svg.png',
@@ -5124,69 +5065,65 @@ class HomePage extends StatelessWidget {
                   },
                 ),*/
 
-                Expanded(
-                  //padding: EdgeInsets.zero,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    //crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/about');
-                  },
-                  //onPressed: onClick,
-                  child: Text('Cow Activity ',
-                      style: (TextStyle(
-                        fontSize: 15.0,
-                        color: Colors.black,
-                      ))),
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.white,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(110)),
-                  ),
+                      Expanded(
+                        //padding: EdgeInsets.zero,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          //crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.pushNamed(context, '/about');
+                              },
+                              //onPressed: onClick,
+                              child: Text('Cow Activity ',
+                                  style: (TextStyle(
+                                    fontSize: 15.0,
+                                    color: Colors.black,
+                                  ))),
+                              style: ElevatedButton.styleFrom(
+                                primary: Colors.white,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(110)),
+                              ),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                Navigator.pushNamed(context, '/services');
+                              },
+                              //onPressed: onClick,
+                              child: Text('Team ',
+                                  style: (TextStyle(
+                                    fontSize: 15.0,
+                                    color: Colors.black,
+                                  ))),
+                              style: ElevatedButton.styleFrom(
+                                primary: Colors.white,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(110)),
+                              ),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                Navigator.pushNamed(context, '/contact');
+                              },
+                              //onPressed: onClick,
+                              child: Text('Contact Us ',
+                                  style: (TextStyle(
+                                    fontSize: 15.0,
+                                    color: Colors.black,
+                                  ))),
+                              style: ElevatedButton.styleFrom(
+                                primary: Colors.white,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(110)),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
 
-                ),
-                TextButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/services');
-                  },
-                  //onPressed: onClick,
-                  child: Text('Team ',
-                      style: (TextStyle(
-                        fontSize: 15.0,
-                        color: Colors.black,
-                      ))),
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.white,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(110)),
-                  ),
-
-                ),
-                TextButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/contact');
-                  },
-                  //onPressed: onClick,
-                  child: Text('Contact Us ',
-                      style: (TextStyle(
-                        fontSize: 15.0,
-                        color: Colors.black,
-                      ))),
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.white,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(110)),
-                  ),
-
-                ),
-                ],
-                  ),
-                ),
-
-
-                /*
+                      /*
                 IconButton(
                   icon: Icon(Icons.info),
                   onPressed: () {
@@ -5206,136 +5143,111 @@ class HomePage extends StatelessWidget {
                     Navigator.pushNamed(context, '/contact');
                   },
                 ),*/
-              ],
-            ),
-          ),
-      ),
+                    ],
+                  ),
+                ),
+              ),
 
+              //Awadh heading homepage
+              Container(
+                padding: EdgeInsets.all(16.0),
+                child: Text(
+                  'Agriculture & Water Technology Development Hub',
+                  style: TextStyle(fontSize: 40.0, fontWeight: FontWeight.bold),
+                ),
+              ),
 
-          //Awadh heading homepage
-          Container(
-            padding: EdgeInsets.all(16.0),
-            child: Text(
-              'Agriculture & Water Technology Development Hub',
-              style: TextStyle(fontSize: 40.0, fontWeight: FontWeight.bold),
+              //Image below heading
+              Container(
+                padding: EdgeInsets.all(16.0),
+                child: Image.asset(
+                  'assets/images/awadh_fam.jpeg',
+                  //width: 500.0,
+                  //height: 300.0,
+                  fit: BoxFit.cover,
+                ),
+              ),
 
-
-
-
-            ),
-          ),
-
-          //Image below heading
-          Container(
-            padding: EdgeInsets.all(16.0),
-
-            child: Image.asset(
-              'assets/images/awadh_fam.jpeg',
-              //width: 500.0,
-              //height: 300.0,
-              fit: BoxFit.cover,
-
-            ),
-
-          ),
-
-          //iHub defination
-          Container(
-            padding: EdgeInsets.all(16.0),
-            child: Text(
+              //iHub defination
+              Container(
+                padding: EdgeInsets.all(16.0),
+                child: Text(
                   'IIT Ropar Technology and Innovation Foundation (iHub – AWaDH) for Agriculture and Water Technology Development Hub'
-                      '  is established by the Department of Science & Technology (DST), Government of India, '
-                      'at the Indian Institute of Technology Ropar in the framework of '
-                      'National Mission on Interdisciplinary Cyber Physical Systems (NM – ICPS) with time-bound predefined deliverables.\n\nWith a funding support of 110 Cr through DST Govt of India, IIT Ropar Technology & Innovation Foundation support '
-                      'deep-tech research ideas. startups, innovators.'
-                      '\n\nThe hub supports R&D in the domain of Agriculture, Water, IoT, ICPS  provides incubation & acceleration  resources and '
-                      'support to technology-based start-ups towards sustainable agriculture.',
-                   style: TextStyle(fontSize: 20.0/*, fontWeight: FontWeight.bold*/),
+                  '  is established by the Department of Science & Technology (DST), Government of India, '
+                  'at the Indian Institute of Technology Ropar in the framework of '
+                  'National Mission on Interdisciplinary Cyber Physical Systems (NM – ICPS) with time-bound predefined deliverables.\n\nWith a funding support of 110 Cr through DST Govt of India, IIT Ropar Technology & Innovation Foundation support '
+                  'deep-tech research ideas. startups, innovators.'
+                  '\n\nThe hub supports R&D in the domain of Agriculture, Water, IoT, ICPS  provides incubation & acceleration  resources and '
+                  'support to technology-based start-ups towards sustainable agriculture.',
+                  style: TextStyle(
+                      fontSize: 20.0 /*, fontWeight: FontWeight.bold*/),
+                ),
+              ),
 
+              //Mission title
+              Container(
+                alignment: AlignmentDirectional.centerStart,
+                padding: EdgeInsets.all(5.0),
+                child: Text(
+                  'Our Mission ',
+                  style: TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold),
+                ),
+              ),
 
+              //Misson Image
+              Container(
+                padding: EdgeInsets.all(5.0),
+                child: Image.asset(
+                  'assets/images/mission.jpeg',
+                  width: 550.0,
+                  height: 450.0,
+                  //fit: BoxFit.cover,
+                ),
+              ),
 
-
-            ),
-          ),
-
-
-
-
-          //Mission title
-          Container(
-            alignment: AlignmentDirectional.centerStart,
-            padding: EdgeInsets.all(5.0),
-            child: Text(
-              'Our Mission ',
-              style: TextStyle(fontSize: 30.0,  fontWeight: FontWeight.bold),
-
-
-
-
-            ),
-          ),
-
-          //Misson Image
-          Container(
-            padding: EdgeInsets.all(5.0),
-            child: Image.asset(
-              'assets/images/mission.jpeg',
-              width: 550.0,
-              height: 450.0,
-              //fit: BoxFit.cover,
-
-            ),
-          ),
-
-          //Misson of Awadh
-          Container(
-            padding: EdgeInsets.all(16.0),
-
-            child: Text(
-              '"Environmentally sustainable and profitable agriculture, '
+              //Misson of Awadh
+              Container(
+                padding: EdgeInsets.all(16.0),
+                child: Text(
+                  '"Environmentally sustainable and profitable agriculture, '
                   'quality food for all, and the preservation of biodiversity"\n\n',
-              style: TextStyle(fontSize: 20.0),
-            ),
+                  style: TextStyle(fontSize: 20.0),
+                ),
+              ),
 
-          ),
+              //how things work
+              Container(
+                alignment: AlignmentDirectional.centerStart,
+                padding: EdgeInsets.all(16.0),
+                child: Text('How things work internally?',
+                    style:
+                        TextStyle(fontSize: 35.0, fontWeight: FontWeight.bold)),
+              ),
 
-          //how things work
-          Container(
-            alignment: AlignmentDirectional.centerStart,
-            padding: EdgeInsets.all(16.0),
-            child: Text(
-              'How things work internally?',
-                style: TextStyle(fontSize: 35.0, fontWeight: FontWeight.bold)
-            ),
-          ),
+              //gateway image
+              Container(
+                padding: EdgeInsets.all(16.0),
+                child: Image.asset(
+                  'assets/images/gateway_img.png',
+                  width: 500.0,
+                  height: 300.0,
+                  //fit: BoxFit.cover,
+                ),
+              ),
 
-          //gateway image
-          Container(
-            padding: EdgeInsets.all(16.0),
+              //Gateway explaination
+              Container(
+                padding: EdgeInsets.all(16.0),
+                child: Text(
+                    'As stated in the flow above the Node consist of a microcontroller(NRF52832) & Accelerometer(LIS3Dh)'
+                    '\n\nNode sends the data to the Gateway on regular basis'
+                    'Gateway captures the data of accelerometer from different nodes at 500ms continously'
+                    '40 seconds & then make a packet of 256 bytes including Node ID and Epoch Times and upload to AWS cloud.',
+                    style:
+                        TextStyle(fontSize: 20.0, fontStyle: FontStyle.italic)),
+              ),
 
-            child: Image.asset(
-              'assets/images/gateway_img.png',
-              width: 500.0,
-              height: 300.0,
-              //fit: BoxFit.cover,
-
-            ),
-
-          ),
-
-          //Gateway explaination
-          Container(
-            padding: EdgeInsets.all(16.0),
-            child: Text(
-              'As stated in the flow above the Node consist of a microcontroller(NRF52832) & Accelerometer(LIS3Dh)'
-                '\n\nNode sends the data to the Gateway on regular basis'
-                'Gateway captures the data of accelerometer from different nodes at 500ms continously'
-                '40 seconds & then make a packet of 256 bytes including Node ID and Epoch Times and upload to AWS cloud.',
-                style: TextStyle(fontSize: 20.0, fontStyle: FontStyle.italic)
-            ),
-          ),
-
-          /*
+              /*
           Expanded(
             child: Center(
               child: Text(
@@ -5344,21 +5256,21 @@ class HomePage extends StatelessWidget {
               ),
             ),
           ),*/
-        ],
-      ),
-    ),
+            ],
+          ),
+        ),
       ),
     );
   }
 }
-
 
 class AboutPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Cow Activity', style: TextStyle(fontSize: 20.0, color: Colors.black)),
+        title: Text('Cow Activity',
+            style: TextStyle(fontSize: 20.0, color: Colors.black)),
         backgroundColor: Colors.white,
         iconTheme: IconThemeData(color: Colors.black),
       ),
@@ -5398,7 +5310,6 @@ class AboutPage extends StatelessWidget {
                         child: Text('ACTIVITY STATUS '),
                       ),
                     ),
-
                   ],
                 ),
 
@@ -5558,7 +5469,6 @@ class AboutPage extends StatelessWidget {
                   ],
                 ),
 
-
                 // Add more rows if needed
               ],
             ),
@@ -5574,7 +5484,8 @@ class ServicesPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Services', style: TextStyle(fontSize: 20.0, color: Colors.black)),
+        title: Text('Services',
+            style: TextStyle(fontSize: 20.0, color: Colors.black)),
         backgroundColor: Colors.white,
         iconTheme: IconThemeData(color: Colors.black),
       ),
@@ -5593,7 +5504,8 @@ class ContactPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Contact Us', style: TextStyle(fontSize: 20.0, color: Colors.black)),
+        title: Text('Contact Us',
+            style: TextStyle(fontSize: 20.0, color: Colors.black)),
         backgroundColor: Colors.white,
         iconTheme: IconThemeData(color: Colors.black),
       ),
@@ -5663,7 +5575,8 @@ class DataPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Activity Status ', style: TextStyle(fontSize: 20.0, color: Colors.black)),
+        title: Text('Activity Status ',
+            style: TextStyle(fontSize: 20.0, color: Colors.black)),
         backgroundColor: Colors.white,
         iconTheme: IconThemeData(color: Colors.black),
       ),
@@ -5671,13 +5584,15 @@ class DataPage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('Displaying Data', style: TextStyle(fontSize: 40.0, color: Colors.black)),
+            Text('Displaying Data',
+                style: TextStyle(fontSize: 40.0, color: Colors.black)),
             SizedBox(height: 16.0),
             ElevatedButton(
               onPressed: () {
                 // Perform download action
               },
-              child: Text('Download', style: TextStyle(fontSize: 20.0, color: Colors.black)),
+              child: Text('Download',
+                  style: TextStyle(fontSize: 20.0, color: Colors.black)),
             ),
           ],
         ),
