@@ -7,7 +7,24 @@
     <list default="true" id="e50a8ab2-8fa2-4990-8f32-a2999c2f3a51" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.flutter-plugins-dependencies" beforeDir="false" afterPath="$PROJECT_DIR$/.flutter-plugins-dependencies" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/e29aedf18e567df5728f6b7ce57d2e97.cache.dill.track.dill" beforeDir="false" afterPath="$PROJECT_DIR$/build/e29aedf18e567df5728f6b7ce57d2e97.cache.dill.track.dill" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/assets/images/Screenshot 2023-07-17 at 3.58.22 PM.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/assets/images/acc.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/assets/images/awadh_fam.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/assets/images/awadh_logo.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/assets/images/awadh_logo2.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/assets/images/awadh_logo_only.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/assets/images/background.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/assets/images/cow_banner1.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/assets/images/gateway_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/assets/images/gps.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/assets/images/iitropar_logo.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/assets/images/img1.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/assets/images/imgr1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/assets/images/logo1.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/assets/images/logo2.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/assets/images/mission.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/assets/images/science_tech_logo.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/assets/images/sct_logo.jpeg" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -25,19 +42,19 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.cidr.known.project.marker": "true",
-    "cidr.known.project.marker": "true",
-    "dart.analysis.tool.window.visible": "false",
-    "io.flutter.reload.alreadyRun": "true",
-    "last_opened_file_path": "/Users/sarthakjain/Desktop/test_cow",
-    "settings.editor.selected.configurable": "AndroidSdkUpdater",
-    "show.migrate.to.gradle.popup": "false"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;dart.analysis.tool.window.visible&quot;: &quot;false&quot;,
+    &quot;io.flutter.reload.alreadyRun&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/sarthakjain/Desktop/test_cow&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;AndroidSdkUpdater&quot;,
+    &quot;show.migrate.to.gradle.popup&quot;: &quot;false&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration name="main.dart" type="FlutterRunConfigurationType" factoryName="Flutter">
       <option name="filePath" value="$PROJECT_DIR$/lib/main.dart" />
