@@ -5020,7 +5020,7 @@ class HomePage extends StatelessWidget {
                             //IITRopar logo
                             IconButton(
                               icon: Image.network(
-                                'ahttps://upload.wikimedia.org/wikipedia/en/thumb/f/f9/Indian_Institute_of_Technology_Ropar_logo.png/220px-Indian_Institute_of_Technology_Ropar_logo.png',
+                                'https://upload.wikimedia.org/wikipedia/en/thumb/f/f9/Indian_Institute_of_Technology_Ropar_logo.png/220px-Indian_Institute_of_Technology_Ropar_logo.png',
                                 //height: 500.0,
                                 //width: 150.0
                                 //color: Colors.white,
