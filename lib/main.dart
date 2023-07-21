@@ -4922,6 +4922,7 @@ import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:universal_html/html.dart' as html;
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/services.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 void main() {
   runApp(NavigationBarApp());
@@ -4971,6 +4972,7 @@ class NavigationBarApp extends StatelessWidget {
 }
 
 class HomePage extends StatelessWidget {
+  final imageUrl = 'https://asset-timestsw-com.s3.ap-south-1.amazonaws.com/wp-content/uploads/2020/05/25183010/IIT-Ropar-2.png';
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
@@ -5002,7 +5004,7 @@ class HomePage extends StatelessWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            //Awadh logo
+                            //Awadh logo ok
                             IconButton(
                               icon: Image.network(
                                 'https://pbs.twimg.com/profile_images/1457950809623187463/N8F-A4xt_400x400.jpg',
@@ -5017,10 +5019,11 @@ class HomePage extends StatelessWidget {
                               },
                             ),
 
-                            //IITRopar logo
+                            //IITRopar logo error
                             IconButton(
-                              icon: Image.network(
-                                'https://asset-timestsw-com.s3.ap-south-1.amazonaws.com/wp-content/uploads/2020/05/25183010/IIT-Ropar-2.png',
+                              icon: CachedNetworkImage(
+                                imageUrl : imageUrl;
+                                //'https://asset-timestsw-com.s3.ap-south-1.amazonaws.com/wp-content/uploads/2020/05/25183010/IIT-Ropar-2.png',
                                 //height: 500.0,
                                 //width: 150.0
                                 //color: Colors.white,
