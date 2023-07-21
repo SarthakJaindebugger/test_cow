@@ -5160,8 +5160,10 @@ class HomePage extends StatelessWidget {
               //Image below heading
               Container(
                 padding: EdgeInsets.all(16.0),
-                child: Image.asset(
-                  'assets/images/awadh_fam.jpeg',
+                //child: Image.asset(
+                child: Image.network(
+                  'https://images.news18.com/ibnlive/uploads/2021/05/1620807798_iitropar.jpg?im=Resize,width=360,aspect=fit,type=normal?im=Resize,width=320,aspect=fit,type=normal',
+                  //'assets/images/awadh_fam.jpeg',
                   //width: 500.0,
                   //height: 300.0,
                   fit: BoxFit.cover,
