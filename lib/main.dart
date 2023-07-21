@@ -5036,7 +5036,7 @@ class HomePage extends StatelessWidget {
                             //Department of Sciecne of Technology logo
                             IconButton(
                               icon: Image.network(
-                                'https://dst.gov.in/sites/all/modules/customs/cmf_content/assets/images/dst-logo1.jpg',
+                                'https://upload.wikimedia.org/wikipedia/commons/thumb/d/dc/Ministry_of_Science_and_Technology_India.svg/1200px-Ministry_of_Science_and_Technology_India.svg.png',
                                 //height: 500.0,
                                 //width: 150.0
                                 //color: Colors.white,
