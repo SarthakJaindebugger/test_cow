@@ -1,3 +1,566 @@
+/*
+import 'dart:convert';
+import 'dart:io';
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:csv/csv.dart';
+import 'package:http/http.dart' as http;
+import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:universal_html/html.dart' as html;
+import 'package:url_launcher/url_launcher.dart';
+
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  FlutterDownloader.initialize(debug: true);
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Cow WebAPP',
+      theme: ThemeData(
+        primarySwatch: Colors.green,
+      ),
+      home: FieldPage(),
+    );
+  }
+}
+
+class FieldPage extends StatefulWidget {
+  @override
+  _FieldPageState createState() => _FieldPageState();
+}
+
+class _FieldPageState extends State<FieldPage> {
+  final TextEditingController deviceIdController = TextEditingController();
+  final TextEditingController startTimeController = TextEditingController();
+  final TextEditingController endTimeController = TextEditingController();
+
+  //int? deviceId = int.tryParse('105');
+  String deviceId = '';
+  String starttime = '';
+  String endtime = '';
+/*
+  void _storeInputData() {
+    setState(() {
+      deviceId = deviceIdController.text;
+    });
+  }*/
+
+  /*
+  void _convertToInt() {
+    int? inputValue = int.tryParse(deviceIdController.text);
+    if (inputValue != null) {
+      deviceId = inputValue.toString();
+    } else {
+      deviceId = 'Invalid input';
+    }
+  }
+
+   */
+
+  DateTime? startTime;
+  DateTime? endTime;
+
+  void _showDatePicker(BuildContext context, bool isStartTime) async {
+    final DateTime? selectedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2100),
+    );
+
+    if (selectedDate != null) {
+      final TimeOfDay? selectedTime = await showTimePicker(
+        context: context,
+        initialTime: TimeOfDay.now(),
+      );
+
+      if (selectedTime != null) {
+        final DateTime combinedDateTime = DateTime(
+          selectedDate.year,
+          selectedDate.month,
+          selectedDate.day,
+          selectedTime.hour,
+          selectedTime.minute,
+        );
+
+        setState(() {
+          if (isStartTime) {
+            startTime = combinedDateTime;
+          } else {
+            endTime = combinedDateTime;
+          }
+        });
+      }
+    }
+  }
+
+  //download data
+  void _downloadData() {
+    //if (startTime != null && endTime != null) {
+    //final int startTimeEpoch = startTime!.millisecondsSinceEpoch ~/ 1000;
+    //final int endTimeEpoch = endTime!.millisecondsSinceEpoch ~/ 1000;
+    print('Device ID: ${deviceIdController.text}');
+    print('Start Epoch Time: ${startTimeController.text}');
+    print('End Epoch Time : ${endTimeController.text}');
+    //print('Start Time Epoch: $startTimeEpoch');
+    //print('End Time Epoch: $endTimeEpoch');
+
+    final jsonData = {
+      'DeviceID': deviceIdController.text,
+      'StartTime': startTimeController.text,
+      'EndTime': endTimeController.text,
+    };
+
+    final csvContent = convertToCsv([jsonData]);
+    _saveCsvFile(csvContent);
+    //}
+  }
+
+//Fetch data in tabular format
+  /*void fetchData() async {
+    final url = Uri.parse('https://wcelyqvyi7.execute-api.us-east-1.amazonaws.com/deployment/cow?deviceId=120&starttime=1688132921&endtime=1688133222');  // Replace with your API endpoint
+
+    final response = await http.get(url);
+    if (response.statusCode == 200) {
+      final jsonData = jsonDecode(response.body)as List<dynamic>;
+
+      final List<DataRow> dataRows = [];
+
+      jsonData.forEach((item) {
+        final dataRow = DataRow(cells: [
+          DataCell(Text(item['Device ID'].toString())),
+          DataCell(Text(item['Start Time'].toString())),
+          DataCell(Text(item['End Time'].toString())),
+        ]);
+        dataRows.add(dataRow);
+      });
+
+      runApp(printTabular(dataRows: dataRows));
+    } else {
+      print('Error: ${response.statusCode}');
+    }
+  }*/
+
+//Fetch data 2
+  /* void fetchData() async {
+    final url = Uri.parse('https://wcelyqvyi7.execute-api.us-east-1.amazonaws.com/deployment/cow?deviceId=120&starttime=1688132921&endtime=1688133222');  // Replace with your API endpoint
+
+    final response = await http.get(url);
+    if (response.statusCode == 200) {
+      final jsonData = jsonDecode(response.body) as List<dynamic>;
+
+      final List<DataRow> dataRows = jsonData.map((item) {
+        return DataRow(cells: [
+          DataCell(Text(item['id'].toString())),
+          DataCell(Text(item['id'].toString())),
+          DataCell(Text(item['id'].toString())),
+        ]);
+      }).toList();
+
+      print(jsonData); // Print the fetched data on the console
+
+      runApp(printTabular(dataRows: dataRows));
+    } else {
+      print('Error: ${response.statusCode}');
+    }
+  }*/
+
+//fetch and download data
+  /* void fetchDataAndDownload() async {
+    final url = Uri.parse('https://wcelyqvyi7.execute-api.us-east-1.amazonaws.com/deployment/cow?deviceId=120&starttime=1688132921&endtime=1688133222');  // Replace with your API endpoint
+
+    final response = await http.get(url);
+    if (response.statusCode == 200) {
+      final jsonData = response.body;
+      const fileName = 'cow_data.json'; // Specify the file name and extension
+
+      final directory = await getApplicationDocumentsDirectory();
+      final filePath = '${directory.path}/$fileName';
+
+      final file = File(filePath);
+      await file.writeAsString(jsonData);
+
+      print('JSON data saved at: $filePath');
+    } else {
+      print('Error: ${response.statusCode}');
+    }
+  }*/
+
+//fetch data & downlaod 2
+  /*void fetchDataAndDownload() async {
+    final url = Uri.parse('https://wcelyqvyi7.execute-api.us-east-1.amazonaws.com/deployment/cow?deviceId=120&starttime=1688132921&endtime=1688133222');  // Replace with your API endpoint
+
+    final response = await http.get(url);
+    if (response.statusCode == 200) {
+      final jsonData = response.body;
+      const fileName = 'cow_data.json'; // Specify the file name and extension
+      print(jsonData);
+
+      Directory? directory;
+      try {
+        directory = await getApplicationDocumentsDirectory();
+      } catch (e) {
+        // Use getTemporaryDirectory as a fallback
+        directory = await getTemporaryDirectory() as Directory?;
+      }
+
+      if (directory != null) {
+        final filePath = '${directory.path}/$fileName';
+
+        final file = File(filePath);
+        await file.writeAsString(jsonData);
+
+        print('JSON data saved at: $filePath');
+
+      } else {
+        print('Error: Unable to get the storage directory.');
+      }
+    } else {
+      print('Error: ${response.statusCode}');
+    }
+  }*/
+
+  void fetchDataAndPrint() async {
+    print(deviceId);
+    print(starttime);
+    print(endtime);
+    //final url = Uri.parse('https://wcelyqvyi7.execute-api.us-east-1.amazonaws.com/deployment/cow?deviceId=105&starttime=1688132921&endtime=1688133222'); // Replace with your API endpoint
+    final url = Uri.parse(
+        'https://wcelyqvyi7.execute-api.us-east-1.amazonaws.com/deployment/cow?deviceId=$deviceId&starttime=$starttime&endtime=$endtime'); // Replace with your API endpoint
+    //https://wcelyqvyi7.execute-api.us-east-1.amazonaws.com/deployment/cow?deviceId=$deviceId&starttime=$starttime&endtime=$endtime
+    final response = await http.get(url);
+    if (response.statusCode == 200) {
+      final jsonData = json.decode(response.body);
+      printData(jsonData);
+    } else {
+      print('Error: ${response.statusCode}');
+    }
+  }
+
+  void printData(dynamic jsonData) {
+    final encodedData = json.encode(jsonData);
+    final decodedData = json.decode(encodedData);
+
+    if (decodedData is List) {
+      for (var item in decodedData) {
+        printRow(item);
+      }
+    } else if (decodedData is Map) {
+      printRow(decodedData);
+    } else {
+      print('Invalid JSON data');
+    }
+  }
+
+  void printRow(Map<dynamic, dynamic> data) {
+    data.forEach((key, value) {
+      print('$key: $value');
+    });
+    print('---------------------------------');
+  }
+
+//Fetch and download data 3 .json(working)
+  void fetchDataAndDownload() async {
+    print(deviceId);
+    print(starttime);
+    print(endtime);
+    final url = Uri.parse(
+        'https://wcelyqvyi7.execute-api.us-east-1.amazonaws.com/deployment/cow?deviceId=$deviceId&starttime=$starttime&endtime=$endtime'); // Replace with your API endpoint
+    //final url = Uri.parse('https://wcelyqvyi7.execute-api.us-east-1.amazonaws.com/deployment/cow?deviceId=105&starttime=1688132921&endtime=1688133222'); // Replace with your API endpoint
+
+    final response = await http.get(url);
+    if (response.statusCode == 200) {
+      final jsonData = response.body;
+      const fileName = 'cow_data.json'; // Specify the file name and extension
+
+      //final decodedData = json.decode(jsonData);
+      //final csvData = ListToCsvConverter().convert(decodedData);
+
+      final anchor = html.AnchorElement(
+          href:
+              'data:text/plain;charset=utf-8,${Uri.encodeComponent(jsonData)}')
+        ..setAttribute('download', fileName)
+        ..click();
+
+      fetchDataAndPrint();
+      //jsonData.forEach((int jsonData) => print(jsonData));
+
+      //print(jsonData);
+    } else {
+      print('Error: ${response.statusCode}');
+    }
+  }
+
+//Tabular printing
+  /* void fetchDataAndDownload() async {
+    final url = Uri.parse('https://wcelyqvyi7.execute-api.us-east-1.amazonaws.com/deployment/cow?deviceId=120&starttime=1688132921&endtime=1688133222');  // Replace with your API endpoint
+
+    final response = await http.get(url);
+    if (response.statusCode == 200) {
+      final jsonData = response.body;
+      final decodedData = json.decode(jsonData);
+      print(jsonData);
+
+      final List<TableRow> tableRows = [];
+      if (decodedData is List) {
+        // Assuming the JSON data is an array of objects
+        if (decodedData.isNotEmpty) {
+          final firstObject = decodedData.first;
+          final List<TableCell> headers = firstObject.keys.map((key) {
+            return TableCell(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(key, style: TextStyle(fontWeight: FontWeight.bold)),
+              ),
+            );
+          }).toList();
+          tableRows.add(TableRow(children: headers));
+
+          for (var dataObject in decodedData) {
+            final List<TableCell> cells = dataObject.values.map((value) {
+              return TableCell(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(value.toString()),
+                ),
+              );
+            }).toList();
+            tableRows.add(TableRow(children: cells));
+
+            // Print the row data on the console
+            cells.forEach((cell) {
+              final textData = (cell.child as Padding).child as Text;
+              print(textData.data);
+            });
+          }
+        }
+      }
+
+      showDialog(
+        context: context,
+        builder: (context) {
+          return Dialog(
+            child: Container(
+              padding: EdgeInsets.all(16),
+              child: SingleChildScrollView(
+                child: Table(
+                  border: TableBorder.all(),
+                  children: tableRows,
+                ),
+              ),
+            ),
+          );
+        },
+      );
+    } else {
+      print('Error: ${response.statusCode}');
+    }
+  }*/
+
+//Fetch data in json format
+/* void fetchData() async {
+  final url = Uri.parse('https://wcelyqvyi7.execute-api.us-east-1.amazonaws.com/deployment/cow?deviceId=120&starttime=1688132921&endtime=1688133222');  // Replace with your API endpoint
+
+  final response = await http.get(url);
+  if (response.statusCode == 200) {
+    final jsonData = response.body;
+
+    /*
+    // Process the JSON data here
+    final jsonData = {
+      'DeviceID': deviceIdController.text,
+      'StartTime': startTimeController.text,
+      'EndTime': endTimeController.text,
+    };
+
+    final csvContent = convertToCsv([jsonData]);
+    _saveCsvFile(csvContent);
+    */
+
+    print(jsonData);
+  } else {
+    print('Error: ${response.statusCode}');
+  }
+
+}*/
+
+  String convertToCsv(List<Map<String, dynamic>> dataList) {
+    if (dataList.isEmpty) return '';
+
+    final headers = dataList.first.keys.toList();
+    final rows = dataList.map((data) => data.values.toList()).toList();
+
+    final List<List<dynamic>> csvData = [];
+    csvData.add(headers);
+    csvData.addAll(rows);
+
+    final csvContent = const ListToCsvConverter().convert(csvData);
+    return csvContent;
+  }
+
+  Future<void> _saveCsvFile(String csvContent) async {
+    try {
+      final directory = await getApplicationDocumentsDirectory();
+      final file = File('${directory.path}/cow_data.csv');
+
+      await file.writeAsString(csvContent);
+
+      print('CSV file saved successfully');
+    } catch (e) {
+      print('Error saving CSV file: $e');
+    }
+  }
+
+  @override
+  void dispose() {
+    deviceIdController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('HomePage'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            TextField(
+              controller: deviceIdController,
+              onChanged: (value) {
+                deviceId = value;
+              },
+              decoration: InputDecoration(
+                labelText: 'Enter Device ID',
+              ),
+            ),
+            TextField(
+              controller: startTimeController,
+              onChanged: (value) {
+                starttime = value;
+              },
+              decoration: InputDecoration(
+                labelText: 'Enter Start Time in EPOCH format',
+              ),
+            ),
+            TextField(
+              controller: endTimeController,
+              onChanged: (value) {
+                endtime = value;
+              },
+              decoration: InputDecoration(
+                labelText: 'Enter End Time in EPOCH format',
+              ),
+            ),
+
+            //Change here to make the time and date selected by the user
+            /*
+            SizedBox(height: 16),
+            InkWell(
+              onTap: () => _showDatePicker(context, true),
+              child: InputDecorator(
+                decoration: InputDecoration(
+                  labelText: 'Start Time',
+                  border: OutlineInputBorder(),
+                ),
+                child: Text(
+                  startTime != null
+                      ? DateFormat('yyyy-MM-dd HH:mm').format(startTime!)
+                      : 'Select start time',
+                ),
+              ),
+            ),
+            SizedBox(height: 16),
+            InkWell(
+              onTap: () => _showDatePicker(context, false),
+              child: InputDecorator(
+                decoration: InputDecoration(
+                  labelText: 'End Time',
+                  border: OutlineInputBorder(),
+                ),
+                child: Text(
+                  endTime != null
+                      ? DateFormat('yyyy-MM-dd HH:mm').format(endTime!)
+                      : 'Select end time',
+                ),
+              ),
+            ),
+            */
+
+            SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: fetchDataAndDownload,
+              child: Text('Download ',
+                  style: (TextStyle(
+                    fontSize: 20.0,
+                    color: Colors.white,
+                  ))),
+              style: ElevatedButton.styleFrom(
+                primary: Colors.green,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(70)),
+              ),
+              //child: Text('Download'),
+              /*
+              style: ElevatedButton.styleFrom(
+                primary: Colors.green,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(70)),*/
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class printTabular extends StatelessWidget {
+  final List<DataRow> dataRows;
+
+  printTabular({required this.dataRows});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'API ',
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text('API '),
+        ),
+        body: SingleChildScrollView(
+          child: DataTable(
+            columns: [
+              DataColumn(label: Text('Device ID')),
+              DataColumn(label: Text('Start Time')),
+              DataColumn(label: Text('End Time')),
+            ],
+            rows: dataRows,
+          ),
+        ),
+      ),
+    );
+  }
+}
+*/
+
+/*
+def pre_process(data):
+    
+    if data >= 128:
+        data -= 256
+    sf = 6.4 # Scaling Factor
+
+    return str(round(data/sf, 2))
+*/
 
 import 'dart:convert';
 import 'dart:io';
@@ -9,723 +572,566 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:universal_html/html.dart' as html;
 import 'package:url_launcher/url_launcher.dart';
-import 'package:flutter/services.dart';
 
 void main() {
-  runApp(NavigationBarApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  FlutterDownloader.initialize(debug: true);
+  runApp(MyApp());
 }
 
-void onClick() async
-{
-  print("Button cliked!");
-}
-
-
-class NavigationBarApp extends StatelessWidget {
+class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    double height = MediaQuery.of(context).size.height;
-    double width = MediaQuery.of(context).size.width;
-
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'WebApp',
+      title: 'Cow WebAPP',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSwatch().copyWith(
-
-          primary:  Colors.white,
-          secondary:  Colors.yellow.shade700,
-
-          // or from RGB
-
-          //primary: const Color(0xFF343A40),
-          //secondary: const Color(0xFFFFC107),
-
-        ),
+        primarySwatch: Colors.green,
       ),
-
-      /*
-      theme: ThemeData(
-        primarySwatch: Colors.white38,
-      ),*/
-
-
-      home: HomePage(),
-      routes: {
-        '/about': (context) => AboutPage(),
-        '/services': (context) => ServicesPage(),
-        '/contact': (context) => ContactPage(),
-        '/gallery': (context) => GalleryPage(),
-        '/settings': (context) => SettingsPage(),
-        '/help': (context) => HelpPage(),
-      },
+      home: FieldPage(),
     );
   }
 }
 
-class HomePage extends StatelessWidget {
+class FieldPage extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    double height = MediaQuery.of(context).size.height;
-    double width = MediaQuery.of(context).size.width;
-    //double containerWidth = boxConstraints.maxWidth * 0.8;
-    return Scaffold(
-      body: SingleChildScrollView(
-        padding: EdgeInsets.all(1.0),
-        child: Center(
-          child: Column(
+  _FieldPageState createState() => _FieldPageState();
+}
 
-            children: [
+class _FieldPageState extends State<FieldPage> {
+  final TextEditingController deviceIdController = TextEditingController();
+  final TextEditingController startTimeController = TextEditingController();
+  final TextEditingController endTimeController = TextEditingController();
 
+  //int? deviceId = int.tryParse('105');
+  String deviceId = '';
+  String starttime = '';
+  String endtime = '';
+/*
+  void _storeInputData() {
+    setState(() {
+      deviceId = deviceIdController.text;
+    });
+  }*/
 
+  /*
+  void _convertToInt() {
+    int? inputValue = int.tryParse(deviceIdController.text);
+    if (inputValue != null) {
+      deviceId = inputValue.toString();
+    } else {
+      deviceId = 'Invalid input';
+    }
+  }
 
-              SafeArea(
-                //Nav Bar
-                child: Container(
-                  padding: EdgeInsets.zero,
-                  //height : height * 0.2,
-                  //width: width * 0.4,
-                  //height: hight * 0.8,
-                  //width : width * 0.2,
-                  //height: height * 0.1,
-                  //width: width * 0.9,
-                  //width: MediaQuery.of(context).size.width,
-                  //fit: BoxFit.cover,
-                  color: Colors.white,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
+   */
 
-                      Expanded(
+  DateTime? startTime;
+  DateTime? endTime;
 
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            //Awadh logo
-                            IconButton(
-                              icon: Image.asset(
-                                'assets/images/awadh_logo_only.jpeg',
-                                //height: 500.0,
-                                //width: 100.0
-                                //color: Colors.white,
-                              ),
-                              //label:Text('About'),
-                              iconSize: 55.0,
-                              onPressed: () {
-                                Navigator.pushNamed(context, '/');
-                              },
-                            ),
+  void _showDatePicker(BuildContext context, bool isStartTime) async {
+    final DateTime? selectedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2100),
+    );
 
-                            //IITRopar logo
-                            IconButton(
-                              icon: Image.asset(
-                                'assets/images/iitropar_logo.png',
-                                //height: 500.0,
-                                //width: 150.0
-                                //color: Colors.white,
-                              ),
-                              //label:Text('About'),
-                              iconSize: 50.0,
-                              onPressed: () {
-                                const url = 'https://ihub-awadh.in/';
-                                launch(url);
-                              },
-                            ),
+    if (selectedDate != null) {
+      final TimeOfDay? selectedTime = await showTimePicker(
+        context: context,
+        initialTime: TimeOfDay.now(),
+      );
 
-                            //Department of Sciecne of Technology logo
-                            IconButton(
-                              icon: Image.asset(
-                                'assets/images/sct_logo.jpeg',
-                                //height: 500.0,
-                                //width: 150.0
-                                //color: Colors.white,
-                              ),
-                              //label:Text('About'),
-                              iconSize: 100.0,
-                              onPressed: () {
-                                const url ='https://dst.gov.in/';
-                                launch(url);
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
+      if (selectedTime != null) {
+        final DateTime combinedDateTime = DateTime(
+          selectedDate.year,
+          selectedDate.month,
+          selectedDate.day,
+          selectedTime.hour,
+          selectedTime.minute,
+        );
 
-                      /*
-                IconButton(
-                  icon: Image.network(
-                    'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Cow_clipart_01.svg/1200px-Cow_clipart_01.svg.png',
+        setState(() {
+          if (isStartTime) {
+            startTime = combinedDateTime;
+          } else {
+            endTime = combinedDateTime;
+          }
+        });
+      }
+    }
+  }
 
-                    //color: Colors.white,
-                  ),
-                  iconSize: 100.0,
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/');
-                  },
-                ),*/
+  //download data
+  void _downloadData() {
+    //if (startTime != null && endTime != null) {
+    //final int startTimeEpoch = startTime!.millisecondsSinceEpoch ~/ 1000;
+    //final int endTimeEpoch = endTime!.millisecondsSinceEpoch ~/ 1000;
+    print('Device ID: ${deviceIdController.text}');
+    print('Start Epoch Time: ${startTimeController.text}');
+    print('End Epoch Time : ${endTimeController.text}');
+    //print('Start Time Epoch: $startTimeEpoch');
+    //print('End Time Epoch: $endTimeEpoch');
 
-                      Expanded(
-                        //padding: EdgeInsets.zero,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          //crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            TextButton(
-                              onPressed: () {
-                                Navigator.pushNamed(context, '/about');
-                              },
-                              //onPressed: onClick,
-                              child: Text('Cow Activity ',
-                                  style: (TextStyle(
-                                    fontSize: 15.0,
-                                    color: Colors.black,
-                                  ))),
-                              style: ElevatedButton.styleFrom(
-                                primary: Colors.white,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(110)),
-                              ),
+    final jsonData = {
+      'DeviceID': deviceIdController.text,
+      'StartTime': startTimeController.text,
+      'EndTime': endTimeController.text,
+    };
 
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                Navigator.pushNamed(context, '/services');
-                              },
-                              //onPressed: onClick,
-                              child: Text('Team ',
-                                  style: (TextStyle(
-                                    fontSize: 15.0,
-                                    color: Colors.black,
-                                  ))),
-                              style: ElevatedButton.styleFrom(
-                                primary: Colors.white,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(110)),
-                              ),
+    final csvContent = convertToCsv([jsonData]);
+    _saveCsvFile(csvContent);
+    //}
+  }
 
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                Navigator.pushNamed(context, '/contact');
-                              },
-                              //onPressed: onClick,
-                              child: Text('Contact Us ',
-                                  style: (TextStyle(
-                                    fontSize: 15.0,
-                                    color: Colors.black,
-                                  ))),
-                              style: ElevatedButton.styleFrom(
-                                primary: Colors.white,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(110)),
-                              ),
+//Fetch data in tabular format
+  /*void fetchData() async {
+    final url = Uri.parse('https://wcelyqvyi7.execute-api.us-east-1.amazonaws.com/deployment/cow?deviceId=120&starttime=1688132921&endtime=1688133222');  // Replace with your API endpoint
 
-                            ),
-                          ],
-                        ),
-                      ),
+    final response = await http.get(url);
+    if (response.statusCode == 200) {
+      final jsonData = jsonDecode(response.body)as List<dynamic>;
 
+      final List<DataRow> dataRows = [];
 
-                      /*
-                IconButton(
-                  icon: Icon(Icons.info),
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/about');
-                  },
-                ),
+      jsonData.forEach((item) {
+        final dataRow = DataRow(cells: [
+          DataCell(Text(item['Device ID'].toString())),
+          DataCell(Text(item['Start Time'].toString())),
+          DataCell(Text(item['End Time'].toString())),
+        ]);
+        dataRows.add(dataRow);
+      });
 
-                IconButton(
-                  icon: Icon(Icons.miscellaneous_services_outlined),
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/services');
-                  },
-                ),
-                IconButton(
-                  icon: Icon(Icons.contact_mail),
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/contact');
-                  },
-                ),*/
-                    ],
-                  ),
-                ),
+      runApp(printTabular(dataRows: dataRows));
+    } else {
+      print('Error: ${response.statusCode}');
+    }
+  }*/
+
+//Fetch data 2
+  /* void fetchData() async {
+    final url = Uri.parse('https://wcelyqvyi7.execute-api.us-east-1.amazonaws.com/deployment/cow?deviceId=120&starttime=1688132921&endtime=1688133222');  // Replace with your API endpoint
+
+    final response = await http.get(url);
+    if (response.statusCode == 200) {
+      final jsonData = jsonDecode(response.body) as List<dynamic>;
+
+      final List<DataRow> dataRows = jsonData.map((item) {
+        return DataRow(cells: [
+          DataCell(Text(item['id'].toString())),
+          DataCell(Text(item['id'].toString())),
+          DataCell(Text(item['id'].toString())),
+        ]);
+      }).toList();
+
+      print(jsonData); // Print the fetched data on the console
+
+      runApp(printTabular(dataRows: dataRows));
+    } else {
+      print('Error: ${response.statusCode}');
+    }
+  }*/
+
+//fetch and download data
+  /* void fetchDataAndDownload() async {
+    final url = Uri.parse('https://wcelyqvyi7.execute-api.us-east-1.amazonaws.com/deployment/cow?deviceId=120&starttime=1688132921&endtime=1688133222');  // Replace with your API endpoint
+
+    final response = await http.get(url);
+    if (response.statusCode == 200) {
+      final jsonData = response.body;
+      const fileName = 'cow_data.json'; // Specify the file name and extension
+
+      final directory = await getApplicationDocumentsDirectory();
+      final filePath = '${directory.path}/$fileName';
+
+      final file = File(filePath);
+      await file.writeAsString(jsonData);
+
+      print('JSON data saved at: $filePath');
+    } else {
+      print('Error: ${response.statusCode}');
+    }
+  }*/
+
+//fetch data & downlaod 2
+  /*void fetchDataAndDownload() async {
+    final url = Uri.parse('https://wcelyqvyi7.execute-api.us-east-1.amazonaws.com/deployment/cow?deviceId=120&starttime=1688132921&endtime=1688133222');  // Replace with your API endpoint
+
+    final response = await http.get(url);
+    if (response.statusCode == 200) {
+      final jsonData = response.body;
+      const fileName = 'cow_data.json'; // Specify the file name and extension
+      print(jsonData);
+
+      Directory? directory;
+      try {
+        directory = await getApplicationDocumentsDirectory();
+      } catch (e) {
+        // Use getTemporaryDirectory as a fallback
+        directory = await getTemporaryDirectory() as Directory?;
+      }
+
+      if (directory != null) {
+        final filePath = '${directory.path}/$fileName';
+
+        final file = File(filePath);
+        await file.writeAsString(jsonData);
+
+        print('JSON data saved at: $filePath');
+
+      } else {
+        print('Error: Unable to get the storage directory.');
+      }
+    } else {
+      print('Error: ${response.statusCode}');
+    }
+  }*/
+
+  void fetchDataAndPrint() async {
+    print(deviceId);
+    print(starttime);
+    print(endtime);
+    //final url = Uri.parse('https://wcelyqvyi7.execute-api.us-east-1.amazonaws.com/deployment/cow?deviceId=105&starttime=1688132921&endtime=1688133222'); // Replace with your API endpoint
+    final url = Uri.parse(
+        'https://wcelyqvyi7.execute-api.us-east-1.amazonaws.com/deployment/cow?deviceId=$deviceId&starttime=$starttime&endtime=$endtime'); // Replace with your API endpoint
+    //https://wcelyqvyi7.execute-api.us-east-1.amazonaws.com/deployment/cow?deviceId=$deviceId&starttime=$starttime&endtime=$endtime
+    final response = await http.get(url);
+    if (response.statusCode == 200) {
+      final jsonData = json.decode(response.body);
+      printData(jsonData);
+    } else {
+      print('Error: ${response.statusCode}');
+    }
+  }
+
+  void printData(dynamic jsonData) {
+    final encodedData = json.encode(jsonData);
+    final decodedData = json.decode(encodedData);
+
+    if (decodedData is List) {
+      for (var item in decodedData) {
+        printRow(item);
+      }
+    } else if (decodedData is Map) {
+      printRow(decodedData);
+    } else {
+      print('Invalid JSON data');
+    }
+  }
+
+  void printRow(Map<dynamic, dynamic> data) {
+    data.forEach((key, value) {
+      print('$key: $value');
+    });
+    print('---------------------------------');
+  }
+
+//Fetch and download data 3 .json(working)
+  void fetchDataAndDownload() async {
+    print(deviceId);
+    print(starttime);
+    print(endtime);
+    //ENDTIME<STARTTIME
+    final url = Uri.parse(
+        'https://wcelyqvyi7.execute-api.us-east-1.amazonaws.com/deployment/cow?deviceId=$deviceId&starttime=$starttime&endtime=$endtime'); // Replace with your API endpoint
+    //final url = Uri.parse('https://wcelyqvyi7.execute-api.us-east-1.amazonaws.com/deployment/cow?deviceId=105&starttime=1688132921&endtime=1688133222'); // Replace with your API endpoint
+
+    final response = await http.get(url);
+    if (response.statusCode == 200) {
+      final jsonData = response.body;
+      const fileName = 'cow_data.json'; // Specify the file name and extension
+
+      //final decodedData = json.decode(jsonData);
+      //final csvData = ListToCsvConverter().convert(decodedData);
+
+      final anchor = html.AnchorElement(
+          href:
+              'data:text/plain;charset=utf-8,${Uri.encodeComponent(jsonData)}')
+        ..setAttribute('download', fileName)
+        ..click();
+
+      fetchDataAndPrint();
+      //jsonData.forEach((int jsonData) => print(jsonData));
+
+      //print(jsonData);
+    } else {
+      print('Error: ${response.statusCode}');
+    }
+  }
+
+//Tabular printing
+  /* void fetchDataAndDownload() async {
+    final url = Uri.parse('https://wcelyqvyi7.execute-api.us-east-1.amazonaws.com/deployment/cow?deviceId=120&starttime=1688132921&endtime=1688133222');  // Replace with your API endpoint
+
+    final response = await http.get(url);
+    if (response.statusCode == 200) {
+      final jsonData = response.body;
+      final decodedData = json.decode(jsonData);
+      print(jsonData);
+
+      final List<TableRow> tableRows = [];
+      if (decodedData is List) {
+        // Assuming the JSON data is an array of objects
+        if (decodedData.isNotEmpty) {
+          final firstObject = decodedData.first;
+          final List<TableCell> headers = firstObject.keys.map((key) {
+            return TableCell(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(key, style: TextStyle(fontWeight: FontWeight.bold)),
               ),
+            );
+          }).toList();
+          tableRows.add(TableRow(children: headers));
 
-
-              //Awadh heading homepage
-              Container(
-                padding: EdgeInsets.all(16.0),
-                child: Text(
-                  'Agriculture & Water Technology Development Hub',
-                  style: TextStyle(fontSize: 40.0, fontWeight: FontWeight.bold),
-
-
-
-
+          for (var dataObject in decodedData) {
+            final List<TableCell> cells = dataObject.values.map((value) {
+              return TableCell(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(value.toString()),
                 ),
-              ),
+              );
+            }).toList();
+            tableRows.add(TableRow(children: cells));
 
-              //Image below heading
-              Container(
-                padding: EdgeInsets.all(16.0),
+            // Print the row data on the console
+            cells.forEach((cell) {
+              final textData = (cell.child as Padding).child as Text;
+              print(textData.data);
+            });
+          }
+        }
+      }
 
-                child: Image.asset(
-                  'assets/images/awadh_fam.jpeg',
-                  //width: 500.0,
-                  //height: 300.0,
-                  fit: BoxFit.cover,
-
+      showDialog(
+        context: context,
+        builder: (context) {
+          return Dialog(
+            child: Container(
+              padding: EdgeInsets.all(16),
+              child: SingleChildScrollView(
+                child: Table(
+                  border: TableBorder.all(),
+                  children: tableRows,
                 ),
-
-              ),
-
-              //iHub defination
-              Container(
-                padding: EdgeInsets.all(16.0),
-                child: Text(
-                  'IIT Ropar Technology and Innovation Foundation (iHub – AWaDH) for Agriculture and Water Technology Development Hub'
-                      '  is established by the Department of Science & Technology (DST), Government of India, '
-                      'at the Indian Institute of Technology Ropar in the framework of '
-                      'National Mission on Interdisciplinary Cyber Physical Systems (NM – ICPS) with time-bound predefined deliverables.\n\nWith a funding support of 110 Cr through DST Govt of India, IIT Ropar Technology & Innovation Foundation support '
-                      'deep-tech research ideas. startups, innovators.'
-                      '\n\nThe hub supports R&D in the domain of Agriculture, Water, IoT, ICPS  provides incubation & acceleration  resources and '
-                      'support to technology-based start-ups towards sustainable agriculture.',
-                  style: TextStyle(fontSize: 20.0/*, fontWeight: FontWeight.bold*/),
-
-
-
-
-                ),
-              ),
-
-
-
-
-              //Mission title
-              Container(
-                alignment: AlignmentDirectional.centerStart,
-                padding: EdgeInsets.all(5.0),
-                child: Text(
-                  'Our Mission ',
-                  style: TextStyle(fontSize: 30.0,  fontWeight: FontWeight.bold),
-
-
-
-
-                ),
-              ),
-
-              //Misson Image
-              Container(
-                padding: EdgeInsets.all(5.0),
-                child: Image.asset(
-                  'assets/images/mission.jpeg',
-                  width: 550.0,
-                  height: 450.0,
-                  //fit: BoxFit.cover,
-
-                ),
-              ),
-
-              //Misson of Awadh
-              Container(
-                padding: EdgeInsets.all(16.0),
-
-                child: Text(
-                  '"Environmentally sustainable and profitable agriculture, '
-                      'quality food for all, and the preservation of biodiversity"\n\n',
-                  style: TextStyle(fontSize: 20.0),
-                ),
-
-              ),
-
-              //how things work
-              Container(
-                alignment: AlignmentDirectional.centerStart,
-                padding: EdgeInsets.all(16.0),
-                child: Text(
-                    'How things work internally?',
-                    style: TextStyle(fontSize: 35.0, fontWeight: FontWeight.bold)
-                ),
-              ),
-
-              //gateway image
-              Container(
-                padding: EdgeInsets.all(16.0),
-
-                child: Image.asset(
-                  'assets/images/gateway_img.png',
-                  width: 500.0,
-                  height: 300.0,
-                  //fit: BoxFit.cover,
-
-                ),
-
-              ),
-
-              //Gateway explaination
-              Container(
-                padding: EdgeInsets.all(16.0),
-                child: Text(
-                    'As stated in the flow above the Node consist of a microcontroller(NRF52832) & Accelerometer(LIS3Dh)'
-                        '\n\nNode sends the data to the Gateway on regular basis'
-                        'Gateway captures the data of accelerometer from different nodes at 500ms continously'
-                        '40 seconds & then make a packet of 256 bytes including Node ID and Epoch Times and upload to AWS cloud.',
-                    style: TextStyle(fontSize: 20.0, fontStyle: FontStyle.italic)
-                ),
-              ),
-
-              /*
-          Expanded(
-            child: Center(
-              child: Text(
-                'Home Page Content',
-                style: TextStyle(fontSize: 24.0),
               ),
             ),
-          ),*/
+          );
+        },
+      );
+    } else {
+      print('Error: ${response.statusCode}');
+    }
+  }*/
+
+//Fetch data in json format
+/* void fetchData() async {
+  final url = Uri.parse('https://wcelyqvyi7.execute-api.us-east-1.amazonaws.com/deployment/cow?deviceId=120&starttime=1688132921&endtime=1688133222');  // Replace with your API endpoint
+
+  final response = await http.get(url);
+  if (response.statusCode == 200) {
+    final jsonData = response.body;
+
+    /*
+    // Process the JSON data here
+    final jsonData = {
+      'DeviceID': deviceIdController.text,
+      'StartTime': startTimeController.text,
+      'EndTime': endTimeController.text,
+    };
+
+    final csvContent = convertToCsv([jsonData]);
+    _saveCsvFile(csvContent);
+    */
+
+    print(jsonData);
+  } else {
+    print('Error: ${response.statusCode}');
+  }
+
+}*/
+
+  String convertToCsv(List<Map<String, dynamic>> dataList) {
+    if (dataList.isEmpty) return '';
+
+    final headers = dataList.first.keys.toList();
+    final rows = dataList.map((data) => data.values.toList()).toList();
+
+    final List<List<dynamic>> csvData = [];
+    csvData.add(headers);
+    csvData.addAll(rows);
+
+    final csvContent = const ListToCsvConverter().convert(csvData);
+    return csvContent;
+  }
+
+  Future<void> _saveCsvFile(String csvContent) async {
+    try {
+      final directory = await getApplicationDocumentsDirectory();
+      final file = File('${directory.path}/cow_data.csv');
+
+      await file.writeAsString(csvContent);
+
+      print('CSV file saved successfully');
+    } catch (e) {
+      print('Error saving CSV file: $e');
+    }
+  }
+
+  @override
+  void dispose() {
+    deviceIdController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Row(
+          children: [
+
+
+
+            /*Image.asset(
+              'build/assets/images/awadh_logo2.jpeg',//change the logo image
+              width: 150,
+              height: 100,
+
+            ),*/
+
+
+            Text('Cow Monitor ', style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold)),
+            Image.network(
+              //'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Cow_%28Fleckvieh_breed%29_Oeschinensee_Slaunger_2009-07-07.jpg/1200px-Cow_%28Fleckvieh_breed%29_Oeschinensee_Slaunger_2009-07-07.jpg',
+              'https://yt3.googleusercontent.com/5qoF2sM_UgWK8OSwgIZOZfV76-H2UmkSkwEO91UaEljPLlV3Yi76fe6G2A-RsKKjYS0GYh6kjQ=s900-c-k-c0x00ffffff-no-rj',
+              width: 60,
+              height: 60,
+            ),
+          ],
+        ),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            TextField(
+              controller: deviceIdController,
+              onChanged: (value) {
+                deviceId = value;
+              },
+              decoration: InputDecoration(
+                labelText: 'Enter Device ID',
+              ),
+            ),
+            TextField(
+              controller: startTimeController,
+              onChanged: (value) {
+                starttime = value;
+              },
+              decoration: InputDecoration(
+                labelText: 'Enter Start Time in EPOCH format',
+              ),
+            ),
+            TextField(
+              controller: endTimeController,
+              onChanged: (value) {
+                endtime = value;
+              },
+              decoration: InputDecoration(
+                labelText: 'Enter End Time in EPOCH format',
+              ),
+            ),
+
+            //Change here to make the time and date selected by the user
+            /*
+            SizedBox(height: 16),
+            InkWell(
+              onTap: () => _showDatePicker(context, true),
+              child: InputDecorator(
+                decoration: InputDecoration(
+                  labelText: 'Start Time',
+                  border: OutlineInputBorder(),
+                ),
+                child: Text(
+                  startTime != null
+                      ? DateFormat('yyyy-MM-dd HH:mm').format(startTime!)
+                      : 'Select start time',
+                ),
+              ),
+            ),
+            SizedBox(height: 16),
+            InkWell(
+              onTap: () => _showDatePicker(context, false),
+              child: InputDecorator(
+                decoration: InputDecoration(
+                  labelText: 'End Time',
+                  border: OutlineInputBorder(),
+                ),
+                child: Text(
+                  endTime != null
+                      ? DateFormat('yyyy-MM-dd HH:mm').format(endTime!)
+                      : 'Select end time',
+                ),
+              ),
+            ),
+            */
+
+            SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: fetchDataAndDownload,
+              child: Text('Download ',
+                  style: (TextStyle(
+                    fontSize: 20.0,
+                    color: Colors.white,
+                  ))),
+              style: ElevatedButton.styleFrom(
+                primary: Colors.green,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(70)),
+              ),
+              //child: Text('Download'),
+              /*
+              style: ElevatedButton.styleFrom(
+                primary: Colors.green,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(70)),*/
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class printTabular extends StatelessWidget {
+  final List<DataRow> dataRows;
+
+  printTabular({required this.dataRows});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'API ',
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text('API '),
+        ),
+        body: SingleChildScrollView(
+          child: DataTable(
+            columns: [
+              DataColumn(label: Text('Device ID')),
+              DataColumn(label: Text('Start Time')),
+              DataColumn(label: Text('End Time')),
             ],
+            rows: dataRows,
           ),
         ),
       ),
     );
   }
 }
-
-
-class AboutPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Cow Activity', style: TextStyle(fontSize: 20.0, color: Colors.black)),
-        backgroundColor: Colors.white,
-        iconTheme: IconThemeData(color: Colors.black),
-      ),
-      body: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'ALL ACTIVE NODES: ',
-              style: TextStyle(
-                fontSize: 18.0,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            SizedBox(height: 12.0),
-            Table(
-              border: TableBorder.all(width: 1.0, color: Colors.grey),
-              children: [
-                TableRow(
-                  children: [
-                    TableCell(
-                      child: Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text('SNO.'),
-                      ),
-                    ),
-                    TableCell(
-                      child: Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text('COW NODE ID'),
-                      ),
-                    ),
-                    TableCell(
-                      child: Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text('ACTIVITY STATUS '),
-                      ),
-                    ),
-
-                  ],
-                ),
-
-                TableRow(
-                  children: [
-                    TableCell(
-                      child: Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text('1'),
-                      ),
-                    ),
-                    TableCell(
-                      child: Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text('109'),
-                      ),
-                    ),
-                    TableCell(
-                      child: Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: InkWell(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => DataPage(),
-                              ),
-                            );
-                          },
-                          child: Text(
-                            'Click Here',
-                            style: TextStyle(
-                              color: Colors.blue,
-                              decoration: TextDecoration.underline,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-
-                TableRow(
-                  children: [
-                    TableCell(
-                      child: Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text('2'),
-                      ),
-                    ),
-                    TableCell(
-                      child: Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text('112'),
-                      ),
-                    ),
-                    TableCell(
-                      child: Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: InkWell(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => DataPage(),
-                              ),
-                            );
-                          },
-                          child: Text(
-                            'Click Here',
-                            style: TextStyle(
-                              color: Colors.blue,
-                              decoration: TextDecoration.underline,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-
-                TableRow(
-                  children: [
-                    TableCell(
-                      child: Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text('3'),
-                      ),
-                    ),
-                    TableCell(
-                      child: Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text('120'),
-                      ),
-                    ),
-                    TableCell(
-                      child: Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: InkWell(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => DataPage(),
-                              ),
-                            );
-                          },
-                          child: Text(
-                            'Click Here',
-                            style: TextStyle(
-                              color: Colors.blue,
-                              decoration: TextDecoration.underline,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-
-                TableRow(
-                  children: [
-                    TableCell(
-                      child: Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text('4'),
-                      ),
-                    ),
-                    TableCell(
-                      child: Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text('125'),
-                      ),
-                    ),
-                    TableCell(
-                      child: Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: InkWell(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => DataPage(),
-                              ),
-                            );
-                          },
-                          child: Text(
-                            'Click Here',
-                            style: TextStyle(
-                              color: Colors.blue,
-                              decoration: TextDecoration.underline,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-
-
-                // Add more rows if needed
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class ServicesPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Services', style: TextStyle(fontSize: 20.0, color: Colors.black)),
-        backgroundColor: Colors.white,
-        iconTheme: IconThemeData(color: Colors.black),
-      ),
-      body: Center(
-        child: Text(
-          'Services Page Content',
-          style: TextStyle(fontSize: 24.0),
-        ),
-      ),
-    );
-  }
-}
-
-class ContactPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Contact Us', style: TextStyle(fontSize: 20.0, color: Colors.black)),
-        backgroundColor: Colors.white,
-        iconTheme: IconThemeData(color: Colors.black),
-      ),
-      body: Center(
-        child: Text(
-          'Contact Page Content',
-          style: TextStyle(fontSize: 24.0),
-        ),
-      ),
-    );
-  }
-}
-
-class GalleryPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Gallery'),
-      ),
-      body: Center(
-        child: Text(
-          'Gallery Page Content',
-          style: TextStyle(fontSize: 24.0),
-        ),
-      ),
-    );
-  }
-}
-
-class SettingsPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Settings'),
-      ),
-      body: Center(
-        child: Text(
-          'Settings Page Content',
-          style: TextStyle(fontSize: 24.0),
-        ),
-      ),
-    );
-  }
-}
-
-class HelpPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Help'),
-      ),
-      body: Center(
-        child: Text(
-          'Help Page Content',
-          style: TextStyle(fontSize: 24.0),
-        ),
-      ),
-    );
-  }
-}
-
-class DataPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Activity Status ', style: TextStyle(fontSize: 20.0, color: Colors.black)),
-        backgroundColor: Colors.white,
-        iconTheme: IconThemeData(color: Colors.black),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text('Displaying Data', style: TextStyle(fontSize: 40.0, color: Colors.black)),
-            SizedBox(height: 16.0),
-            ElevatedButton(
-              onPressed: () {
-                // Perform download action
-              },
-              child: Text('Download', style: TextStyle(fontSize: 20.0, color: Colors.black)),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-
-
-
